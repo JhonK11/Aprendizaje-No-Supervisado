@@ -1,0 +1,21 @@
+# Dependencias y archivos temporales locales
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.bak
+
+# Configuración personal del editor y del sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Resultados locales de pruebas y capturas
+coverage/
+test-results/
+playwright-report/
+tests/.artifacts/
+.browser-check/

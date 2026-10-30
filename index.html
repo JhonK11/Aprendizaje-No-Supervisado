@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#16624f">
+    <meta name="description" content="Tu laboratorio de aprendizaje no supervisado. Explora datos, descubre patrones y aprende clustering paso a paso.">
+    <title>StatStudio · Tu laboratorio de datos</title>
+    <link rel="stylesheet" href="utilities.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Iconos locales: la interfaz no necesita fuentes ni servicios externos. -->
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+            <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></symbol>
+            <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18"/></symbol>
+            <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9m4 0h3M4 17h3m4 0h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+            <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3v17h17M8 15l4-5 4 2 5-7"/></symbol>
+            <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v16M12 5C8 2 4 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-2-1-6-2-10 1Z"/></symbol>
+            <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.7 2.7 0 0 1 5 1.5c0 2-2.5 2-2.5 4M12 17h.01"/></symbol>
+            <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+            <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+            <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h5l3 4h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+            <symbol id="i-save" viewBox="0 0 24 24"><path d="M4 3h13l4 4v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M7 3v6h9V3M7 21v-8h10v8"/></symbol>
+            <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+            <symbol id="i-gem" viewBox="0 0 24 24"><path d="m3 8 4-5h10l4 5-9 13ZM3 8h18M7 3l5 18 5-18"/></symbol>
+            <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 8V4a1 1 0 0 1 1-1h4m8 0h4a1 1 0 0 1 1 1v4m0 8v4a1 1 0 0 1-1 1h-4M8 21H4a1 1 0 0 1-1-1v-4"/><circle cx="10" cy="11" r="3"/><path d="m12.5 13.5 4 4"/></symbol>
+            <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3Z"/></symbol>
+            <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+            <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+            <symbol id="i-undo" viewBox="0 0 24 24"><path d="m8 4-5 5 5 5M3 9h11a7 7 0 0 1 7 7v4"/></symbol>
+            <symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 4 5 5-5 5m5-5H10a7 7 0 0 0-7 7v4"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+        </defs>
+    </svg>
+    <a href="#appMain" class="skip-link">Saltar al contenido</a>
+    <div class="app-shell">
+        <button id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleNavigation(false)" aria-label="Cerrar navegación" hidden></button>
+        <aside id="mainSidebar" class="sidebar" aria-label="Navegación principal">
+            <a class="brand" href="#inicio" onclick="switchTab('home'); return false" aria-label="StatStudio, inicio">
+                <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m8 23 9-14 9 10M8 23l18-4"/><circle cx="8" cy="23" r="4"/><circle cx="17" cy="9" r="4"/><circle cx="26" cy="19" r="3"/></svg></span>
+                <span>StatStudio<span class="brand-caption">UNAP · DATA LAB</span></span>
+            </a>
+            <div class="workspace-label"><span class="workspace-avatar">UN</span><span>Mi laboratorio<small>Aprendizaje no supervisado</small></span><span class="workspace-dot"></span></div>
+            <p class="nav-label">ESPACIO DE TRABAJO</p>
+            <nav class="primary-navigation">
+                <button id="tab-btn-home" class="nav-item active" onclick="switchTab('home')" aria-current="page"><svg class="icon"><use href="#i-home"/></svg>Inicio</button>
+                <button id="tab-btn-data" class="nav-item" onclick="switchTab('data')"><svg class="icon"><use href="#i-grid"/></svg>Vista de datos</button>
+                <button id="tab-btn-variables" class="nav-item" onclick="switchTab('variables')"><svg class="icon"><use href="#i-sliders"/></svg>Variables</button>
+                <button id="tab-btn-output" class="nav-item" onclick="switchTab('output')"><svg class="icon"><use href="#i-chart"/></svg>Resultados<span id="outputCountBadge" class="nav-count">0</span></button>
+            </nav>
+            <p class="nav-label">APRENDE Y EXPLORA</p>
+            <nav class="secondary-navigation">
+                <button class="nav-item" onclick="openExampleLibrary()"><svg class="icon"><use href="#i-book"/></svg>Ejemplos del curso<span class="tiny-label">7</span></button>
+                <button class="nav-item" onclick="openQuickGuide()"><svg class="icon"><use href="#i-help"/></svg>Guía de inicio</button>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="learning-note"><svg class="icon"><use href="#i-spark"/></svg><strong>Aprende haciendo.</strong><p>Cada iteración cuenta una historia. Descubre qué dicen tus datos.</p><button onclick="openQuickGuide()">Conoce el proceso <span aria-hidden="true">↗</span></button></div>
+                <div class="university-signature"><span class="university-emblem">U</span><span>Universidad Nacional<small>del Altiplano · Puno</small></span></div>
+                <div class="local-save"><span class="status-dot"></span><span id="saveStatus">Autoguardado local activo</span></div>
+            </div>
+        </aside>
+        <div class="workspace-shell">
+            <header class="topbar">
+                <div class="topbar-location"><button id="navigationToggle" class="icon-button mobile-menu" onclick="toggleNavigation()" aria-controls="mainSidebar" aria-expanded="false" aria-label="Abrir navegación"><svg class="icon"><use href="#i-menu"/></svg></button><span class="breadcrumb-root">Mi laboratorio</span><span class="breadcrumb-divider">/</span><strong id="currentPageLabel">Inicio</strong></div>
+                <div class="topbar-actions"><span class="local-session"><span class="status-dot"></span>Sesión local</span><button class="icon-button help-button" onclick="openQuickGuide()" title="Guía de inicio" aria-label="Abrir guía de inicio"><svg class="icon"><use href="#i-help"/></svg></button><button class="button button-primary button-small" onclick="openAnalysisPicker()"><svg class="icon"><use href="#i-plus"/></svg><span>Nuevo análisis</span></button></div>
+            </header>
+            <main id="appMain" class="workspace-main" tabindex="-1">
+                <section id="view-home" class="home-view" aria-labelledby="welcomeTitle">
+                    <div class="home-container">
+                        <div class="welcome-eyebrow"><span class="status-dot"></span> TU ESPACIO PARA EXPLORAR</div>
+                        <div class="welcome-hero">
+                            <div class="hero-copy"><p class="hello-label">Hola, qué bueno verte por aquí.</p><h1 id="welcomeTitle">De los datos,<br>al <span>descubrimiento.</span></h1><p class="hero-description">Encuentra patrones, descubre grupos y entiende cada resultado. Tu laboratorio de aprendizaje no supervisado, paso a paso.</p><div class="hero-actions"><button id="welcomeStartButton" class="button button-primary" onclick="switchTab('data')">Explorar mis datos<svg class="icon"><use href="#i-arrow"/></svg></button><button class="button button-secondary" onclick="document.getElementById('csvFileInput').click()"><svg class="icon"><use href="#i-upload"/></svg>Importar CSV</button></div><p class="hero-footnote"><svg class="icon"><use href="#i-check"/></svg>Sin instalaciones. Todo el análisis en tu navegador.</p></div>
+                            <figure class="discovery-visual"><div class="visual-heading"><span><span class="status-dot"></span>Así se ve un patrón</span><span class="visual-tag">Clustering</span></div><svg id="welcomeScatter" class="welcome-scatter" viewBox="0 0 430 255" role="img" aria-label="Ilustración de tres grupos de puntos con sus centros. No representa el conjunto de datos activo."><defs><pattern id="scatterGrid" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M35 0H0V35" fill="none" stroke="#dfe8e2" stroke-width=".7"/></pattern></defs><rect x="20" y="15" width="390" height="218" fill="url(#scatterGrid)"/><path d="M20 233h390M20 15v218" stroke="#cbd7cf" fill="none"/><ellipse cx="119" cy="167" rx="63" ry="45" transform="rotate(-23 119 167)" fill="#d9eee3" stroke="#b3d6c3" stroke-dasharray="4 5"/><ellipse cx="280" cy="82" rx="72" ry="42" transform="rotate(-15 280 82)" fill="#e8e3f3" stroke="#c8b9df" stroke-dasharray="4 5"/><ellipse cx="315" cy="186" rx="52" ry="34" transform="rotate(12 315 186)" fill="#f6ead2" stroke="#decda5" stroke-dasharray="4 5"/><g id="illustrationPoints"></g><g stroke-width="2.4" stroke-linecap="round"><path d="M113 167h12m-6-6v12" stroke="#287a5c"/><path d="M274 82h12m-6-6v12" stroke="#8964ab"/><path d="M309 186h12m-6-6v12" stroke="#b28a3b"/></g><text x="390" y="250" fill="#8b9b91" font-size="10">Variable X</text><text x="8" y="12" fill="#8b9b91" font-size="10">Y</text></svg><figcaption><span><i class="legend-dot green"></i>Grupo 1</span><span><i class="legend-dot lilac"></i>Grupo 2</span><span><i class="legend-dot sand"></i>Grupo 3</span><span class="illustration-label">Vista ilustrativa</span></figcaption></figure>
+                        </div>
+                        <div class="welcome-metrics" aria-label="Resumen de tu proyecto"><div class="welcome-metric"><span class="metric-icon"><svg class="icon"><use href="#i-grid"/></svg></span><div><strong id="welcomeObservations">6</strong><span>Observaciones en tu hoja</span></div></div><div class="welcome-metric"><span class="metric-icon lilac"><svg class="icon"><use href="#i-sliders"/></svg></span><div><strong id="welcomeVariables">2</strong><span>Variables para explorar</span></div></div><div class="welcome-metric"><span class="metric-icon sand"><svg class="icon"><use href="#i-chart"/></svg></span><div><strong id="welcomeAnalyses">1</strong><span>Análisis en tu sesión</span></div></div></div>
+                        <div class="section-heading"><div><h2>¿Qué quieres descubrir hoy?</h2><p>Elige una herramienta. Te acompañamos en cada paso.</p></div><span class="section-kicker">EXPLORA · COMPRENDE · APRENDE</span></div>
+                        <div class="method-grid">
+                            <button class="method-card" onclick="openConfigModal('outliers')"><span class="method-top"><span class="method-icon sand"><svg class="icon"><use href="#i-scan"/></svg></span><span class="method-pill">Exploración</span></span><strong>Lo que sale de lo común</strong><span>Detecta valores atípicos con IQR y Z-Score. Entiende qué observaciones merecen otra mirada.</span><span class="method-link">Detectar outliers <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                            <button class="method-card" onclick="openConfigModal('kmeans')"><span class="method-top"><span class="method-icon"><svg class="icon"><use href="#i-target"/></svg></span><span class="method-pill">K-Means</span></span><strong>Encuentra conexiones</strong><span>Agrupa observaciones similares y descubre cómo cambian sus centroides en cada iteración.</span><span class="method-link">Explorar K-Means <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                            <button class="method-card" onclick="openConfigModal('kmedoids')"><span class="method-top"><span class="method-icon lilac"><svg class="icon"><use href="#i-gem"/></svg></span><span class="method-pill">K-Medoids · PAM</span></span><strong>Representantes reales</strong><span>Encuentra los puntos que mejor representan cada grupo y sigue los intercambios de PAM.</span><span class="method-link">Explorar K-Medoids <svg class="icon"><use href="#i-arrow"/></svg></span></button>
+                        </div>
+                        <div class="section-heading examples-heading"><div><h2>Empieza con un ejemplo</h2><p>Los casos de clase, listos para experimentar.</p></div><button class="text-button" onclick="openExampleLibrary()">Ver los 7 ejemplos <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+                        <div class="example-grid"><button class="example-card" onclick="startExample('pdf2_estudiantes')"><span class="example-number">01</span><span><strong>Horas de estudio y notas</strong><small>6 estudiantes · K-Means</small></span><svg class="icon"><use href="#i-arrow"/></svg></button><button class="example-card" onclick="startExample('pdf1_salarios')"><span class="example-number sand">02</span><span><strong>Un salario fuera de escala</strong><small>10 trabajadores · Outliers</small></span><svg class="icon"><use href="#i-arrow"/></svg></button><button class="example-card" onclick="startExample('pdf3_outlier')"><span class="example-number lilac">03</span><span><strong>¿Qué cambia con un outlier?</strong><small>7 observaciones · PAM</small></span><svg class="icon"><use href="#i-arrow"/></svg></button></div>
+                        <div class="continue-project"><span class="continue-icon"><svg class="icon"><use href="#i-folder"/></svg></span><div><small>TU CONJUNTO ACTIVO</small><strong id="welcomeDatasetName">Ejemplo Estudiantes</strong></div><button class="text-button" onclick="switchTab('data')">Continuar <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+                        <footer class="home-footer"><span>Hecho para aprender, paso a paso.</span><span>UNAP · Ingeniería Estadística e Informática</span></footer>
+                    </div>
+                </section>
+
+                <section id="view-data" class="data-view hidden" aria-labelledby="dataTitle">
+                    <div class="page-heading"><div><p class="eyebrow">EXPLORA TU CONJUNTO</p><h1 id="dataTitle">Cada dato, una posibilidad.</h1><p>Edita tus observaciones y prepara tu próximo descubrimiento.</p></div><div class="heading-actions"><button class="button button-secondary" onclick="document.getElementById('projectFileInput').click()"><svg class="icon"><use href="#i-folder"/></svg>Abrir proyecto</button><button class="button button-primary" onclick="saveProject()"><svg class="icon"><use href="#i-save"/></svg>Guardar proyecto</button></div></div>
+                    <div class="data-workbench">
+                        <div class="dataset-toolbar"><div class="dataset-picker"><span class="field-caption">CONJUNTO DE DATOS</span><label class="sr-only" for="presetSelect">Elegir un conjunto de ejemplo</label><select id="presetSelect" onchange="loadPreset(this.value)"><option value="custom" disabled>Datos importados / proyecto</option><optgroup label="Detección de outliers"><option value="pdf1_edades">Edades de estudiantes</option><option value="pdf1_salarios">Salarios mensuales</option></optgroup><optgroup label="K-Means"><option value="pdf2_estudiantes" selected>Estudiantes · Horas y notas</option><option value="pdf2_clientes">Clientes · Compras y gasto</option></optgroup><optgroup label="K-Medoids · PAM"><option value="pdf3_estudiantes">Estudiantes · K-Medoids</option><option value="pdf3_outlier">Estudiantes + Outlier G(30,30)</option><option value="pdf3_ejercicio">Puntos · Ejercicio PAM</option></optgroup></select></div><div class="dataset-actions"><button class="button button-secondary button-small" onclick="document.getElementById('csvFileInput').click()"><svg class="icon"><use href="#i-upload"/></svg>Importar CSV</button><button class="button button-quiet button-small" onclick="exportCSV()"><svg class="icon"><use href="#i-download"/></svg>Exportar CSV</button></div></div>
+                        <div class="data-toolbar"><div class="row-tools"><button class="button button-quiet button-small" onclick="addRow()"><svg class="icon"><use href="#i-plus"/></svg>Fila</button><button class="button button-quiet button-small" onclick="deleteSelectedRow()">− Quitar</button><span class="tool-divider"></span><button id="undoButton" class="icon-button" onclick="undoEdit()" aria-label="Deshacer" title="Deshacer · Ctrl+Z" disabled><svg class="icon"><use href="#i-undo"/></svg></button><button id="redoButton" class="icon-button" onclick="redoEdit()" aria-label="Rehacer" title="Rehacer · Ctrl+Y" disabled><svg class="icon"><use href="#i-redo"/></svg></button></div><div class="scaling-tools"><label for="scalingSelect">Escalado</label><select id="scalingSelect" onchange="changeScaling(this.value)"><option value="none">Sin escalado</option><option value="zscore">Estandarizar (Z)</option><option value="minmax">Normalizar [0, 1]</option></select><button id="evaluateKButton" class="button button-soft button-small" onclick="runKEvaluation()"><svg class="icon"><use href="#i-chart"/></svg>Evaluar K</button><details class="more-tools"><summary aria-label="Más opciones de datos" title="Más opciones">•••</summary><div><button onclick="injectOutlierG(); this.closest('details').open=false">Agregar outlier G(30,30)</button><button onclick="clearComputedColumns(); this.closest('details').open=false">Limpiar columnas calculadas</button></div></details></div></div>
+                        <div id="formulaBar" class="formula-bar"><span id="cellCoordBox">B1</span><span class="formula-symbol" aria-hidden="true">ƒx</span><label class="sr-only" for="formulaInput">Valor de la celda seleccionada</label><input id="formulaInput" type="text" placeholder="Selecciona una celda para editar" onchange="updateCellFromFormulaBar(this.value)"><span class="cell-hint">Doble clic para editar</span></div>
+                        <div class="spreadsheet-container"><table class="data-grid" id="dataGridTable" aria-label="Observaciones y resultados calculados"><thead id="dataGridHead"></thead><tbody id="dataGridBody"></tbody></table></div>
+                        <div id="statusBarStats" class="sheet-summary"><span><span class="status-dot"></span><strong id="statN">6</strong> observaciones</span><span>Media X <strong id="statMeanX">0</strong></span><span>Media Y <strong id="statMeanY">0</strong></span><button onclick="switchTab('variables')">Configurar variables ↗</button></div>
+                    </div>
+                </section>
+
+                <section id="view-variables" class="variables-view hidden" aria-labelledby="variablesTitle"><div class="page-heading"><div><p class="eyebrow">DALE CONTEXTO A TUS DATOS</p><h1 id="variablesTitle">Pequeños detalles, más claridad.</h1><p>Personaliza los nombres y las etiquetas que verás en tablas y gráficos.</p></div><button class="button button-secondary" onclick="switchTab('data')">Volver a los datos <svg class="icon"><use href="#i-arrow"/></svg></button></div><div class="information-banner"><svg class="icon"><use href="#i-sliders"/></svg><p>Los nombres identifican tus columnas. Las etiquetas explican qué representa cada variable.</p></div><div class="variables-table-wrap"><table class="variables-table"><thead><tr><th scope="col">N.º</th><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Decimales</th><th scope="col">Etiqueta descriptiva</th><th scope="col">Medida</th><th scope="col">Rol</th></tr></thead><tbody id="variableViewBody"></tbody></table></div><p class="context-note">Cambiar los metadatos elimina los resultados anteriores para mantener tus informes actualizados.</p></section>
+
+                <section id="view-output" class="output-view hidden" aria-labelledby="outputTitle"><div class="page-heading"><div><p class="eyebrow">DE LOS NÚMEROS A LAS IDEAS</p><h1 id="outputTitle">Lo que cuentan tus datos.</h1><p>Consulta tus análisis y recorre el proceso paso a paso.</p></div><div class="heading-actions"><button class="button button-secondary" onclick="runComparisonKMeansVsKMedoids()">Comparar métodos</button><button class="button button-primary" onclick="exportReport()"><svg class="icon"><use href="#i-download"/></svg>Exportar informe</button></div></div><div class="results-layout"><aside class="results-navigation" aria-label="Índice de resultados"><div class="results-nav-heading"><strong>EN ESTA SESIÓN</strong><button onclick="clearOutputViewer()" title="Limpiar resultados">Limpiar</button></div><div id="outputOutlineTree"></div><div class="results-tip"><svg class="icon"><use href="#i-help"/></svg><p>Un resultado se entiende mejor cuando conoces el camino. Explora sus iteraciones.</p></div></aside><div id="outputMainContent"></div></div></section>
+            </main>
+            <footer class="app-status"><span class="status-indicator"></span><span id="analysisStatus" role="status">Preparando tu laboratorio…</span><span id="activeDatasetBadge" class="active-dataset">Estudiantes</span></footer>
+        </div>
+    </div>
+    <input id="csvFileInput" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values" hidden aria-label="Archivo CSV">
+    <input id="projectFileInput" type="file" accept=".json,application/json" hidden aria-label="Archivo de proyecto">
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <div id="chartTooltip" class="chart-tooltip" role="tooltip" hidden></div>
+    <div id="configModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="modal-overlay hidden"><div class="modal-panel"><header class="modal-header"><div><p class="eyebrow">TU SIGUIENTE DESCUBRIMIENTO</p><h2 id="modalTitle">Configurar análisis</h2></div><button class="icon-button" onclick="closeConfigModal()" aria-label="Cerrar diálogo"><svg class="icon"><use href="#i-close"/></svg></button></header><div id="modalBody" class="modal-body"></div><footer class="modal-footer"><button class="button button-secondary" onclick="closeConfigModal()">Cerrar</button><button id="modalRunBtn" class="button button-primary">Ejecutar análisis</button></footer></div></div>
+    <!-- Scripts clásicos en orden de dependencia: compatibles con apertura local. -->
+    <script src="datasets.js"></script><script src="algorithms.js"></script><script src="files.js"></script><script src="data.js"></script><script src="charts.js"></script><script src="ui.js"></script><script src="analyses.js"></script><script src="reports.js"></script><script src="shell.js"></script><script src="script.js"></script>
+</body>
+</html>
